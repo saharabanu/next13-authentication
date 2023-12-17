@@ -1,10 +1,17 @@
+import Banner from "./Banner"
+import Contact from "./Contact"
+import Footer from "./Footer"
+import Service from "./Service"
 
 
 const Home = () => {
   return (
     <div>
 
-        <h2>Hello</h2>
+        <Banner/>
+        <Service/>
+        <Contact/>
+        <Footer/>
     </div>
   )
 }
