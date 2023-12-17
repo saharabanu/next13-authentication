@@ -37,11 +37,11 @@ const Navbar = () => {
                 <li className="pl-5">
                 <Link href="/profile" className="hover:text-blue-800">Profile</Link>
               </li>
-                <p className="">{user?.email} </p>
+                <p className="hidden lg:block">{user?.email} </p>
                 <button onClick={handleLogout} className="bg-blue-400 rounded px-5 py-1 text-white text-md cursor-pointer hover:bg-blue-950">Logout</button>
               </div>
             ) : (
-              <li className="px-10">
+              <li className="px-5">
                 <Link href="/login" className="hover:text-blue-800">Login</Link>
               </li>
             )}
