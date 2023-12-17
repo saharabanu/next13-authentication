@@ -33,6 +33,9 @@ const Navbar = () => {
           <ul>
             {user?.email ? (
               <div className="flex items-center ">
+                <li className="px-10">
+                <Link href="/profile">Profile</Link>
+              </li>
                 <p className="px-10">{user?.email} </p>
                 <button onClick={handleLogout} className="bg-blue-400 rounded px-5 py-2 text-white text-md cursor-pointer">Logout</button>
               </div>
