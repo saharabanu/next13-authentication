@@ -3,7 +3,7 @@
 
 
 # Travel Web App with ReactJs
- This is project is created by Nextjs 13 app router and typescript with Tailwind css framework. I have used firebase for authentication. I have handled all errors and validation.and this project is also responsive for mobile and large devices.
+ This is project is created by Nextjs 13 app router and typescript with Tailwind css framework. I have used firebase for authentication. I have handled all errors and validation.and this project is also responsive for mobile and large devices.I have also created a protected route and one profile page. I have used redux toolkit for state management.
 
 
 ### Some Login user data
