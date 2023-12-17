@@ -1,13 +1,39 @@
 'use client'
+import { loginUser } from "@/redux/features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { LoginFormInputs } from "@/types/globalTypes";
 /* eslint-disable react/no-unescaped-entities */
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit,formState: { errors } } = useForm<LoginFormInputs>();
 
-  const onSubmit = (data:any) => {
-    console.log(data);
+
+ 
+  const dispatch =  useAppDispatch();
+  const router = useRouter();
+
+  // const from = location?.state?.from?.pathname || "/";
+  
+  const { user, isLoading, isError } = useAppSelector(
+    (state: { user: any }) => state.user
+  );
+  useEffect(() => {
+    if (user.email && !isLoading) {
+      router.push('/')
+      toast.success("User loggedin Successfully");
+    }
+  }, [user.email,isLoading, router]);
+  if (isError) {
+    toast.error("Your email or password is incorrect.Please, give valid registered email and password");
+  }
+
+  const onSubmit = (data:LoginFormInputs) => {
+    dispatch(loginUser({ email: data.email, password: data.password }));
   };
   return (
     <div>
