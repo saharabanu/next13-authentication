@@ -5,13 +5,19 @@ import { LoginFormInputs } from "@/types/globalTypes";
 /* eslint-disable react/no-unescaped-entities */
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
 const LoginPage = () => {
   const { register, handleSubmit,formState: { errors } } = useForm<LoginFormInputs>();
+  const [showPassword, setShowPassword] = useState<Boolean>(false);
+  const [password, setPassword] = useState<string>("");
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
  
   const dispatch =  useAppDispatch();
@@ -53,7 +59,7 @@ const LoginPage = () => {
               />
             </div>
 
-            <div className="relative mb-6" data-te-input-wrapper-init>
+            {/* <div className="relative mb-6" data-te-input-wrapper-init>
               <input
                 {...register("password")}
                 name="password"
@@ -63,7 +69,25 @@ const LoginPage = () => {
                 id="exampleInput7"
                 placeholder="Password"
               />
-            </div>
+            </div> */}
+            <div className="relative w-80 mb-6">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  placeholder="password"
+                  className="peer block min-h-[auto] w-full rounded border-0 bg-gray-100 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none text-black"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 px-4 py-2   rounded"
+                >
+                  {showPassword ? <VscEyeClosed /> : <VscEye />}
+                </button>
+              </div>
 
             <input
               type="submit"

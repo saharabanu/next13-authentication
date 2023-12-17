@@ -4,12 +4,21 @@ import { useAppDispatch } from "@/redux/hooks";
 import { SignUpFormInputs } from "@/types/globalTypes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
 const RegisterPage = () => {
-  const router = useRouter()
+  const router = useRouter();
+
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   
 
   const {
@@ -20,24 +29,32 @@ const RegisterPage = () => {
   } = useForm<SignUpFormInputs>();
   const dispatch = useAppDispatch();
 
-  const onSubmit = async (data:SignUpFormInputs) => {
-    console.log(data)
+  const onSubmit = async (data: SignUpFormInputs) => {
     try {
-      const res = await dispatch(createUser({ email: data.email, password: data.password }));
-      console.log(res)
-    
-    if (res?.error?.code === "auth/email-already-in-use") {
-      
-      toast.error("Email is already in use. Please use a different email.");
-    } else {
-      toast.success("User created successfully");
-    router.push("/");
-     
-    }
+      const action = await dispatch(createUser({ email: data.email, password: data.password }));
+      // console.log(action);
+  
+      if (createUser.fulfilled.match(action)) {
+        // User created successfully
+        toast.success("User created successfully");
+        router.push("/");
+      } else if (createUser.rejected.match(action)) {
+        // Error occurred
+        const error = action.payload as { code: string }; // adjust the type as needed
+        if (error.code === "auth/email-already-in-use") {
+          toast.error("Email is already in use. Please use a different email.");
+        } else {
+          toast.error("An error occurred. Please try again later.");
+        }
+      }
     } catch (error) {
-      toast.error("something is wrong, An error occurred. Please try again later.")
+      console.error(error);
+      toast.error("Something went wrong. Please try again later.");
     }
   };
+  
+
+  
 
   return (
     <div>
@@ -68,17 +85,24 @@ const RegisterPage = () => {
               />
             </div>
 
-            <div className="relative mb-6" data-te-input-wrapper-init>
-              <input
-                {...register("password")}
-                name="password"
-                type="password"
-                required
-                className="peer block min-h-[auto] w-full rounded border-0 bg-gray-100 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none text-black"
-                id="exampleInput7"
-                placeholder="Password"
-              />
-            </div>
+            <div className="relative w-80 mb-6">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  placeholder="password"
+                  className="peer block min-h-[auto] w-full rounded border-0 bg-gray-100 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none text-black"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 px-4 py-2   rounded"
+                >
+                  {showPassword ? <VscEyeClosed /> : <VscEye />}
+                </button>
+              </div>
 
             <input
               type="submit"
