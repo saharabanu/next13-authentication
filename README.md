@@ -1,4 +1,4 @@
-## live link: https://next13-authentication-saharabanu.vercel.app/register
+## live link: https://next13-authentication-saharabanu.vercel.app
 
 
 
