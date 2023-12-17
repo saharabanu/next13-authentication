@@ -22,6 +22,7 @@ export default function RootLayout({
       <html lang="en">
         <body>
           <ToastProvider>
+            <Navbar/>
           {children}
           </ToastProvider>
         </body>

@@ -1,13 +1,42 @@
 'use client'
+import { createUser } from "@/redux/features/user/userSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { SignUpFormInputs } from "@/types/globalTypes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const RegisterPage = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const router = useRouter()
+  
 
-  const onSubmit = (data:any) => {
-    console.log(data);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<SignUpFormInputs>();
+  const dispatch = useAppDispatch();
+
+  const onSubmit = async (data:SignUpFormInputs) => {
+    console.log(data)
+    try {
+      const res = await dispatch(createUser({ email: data.email, password: data.password }));
+      console.log(res)
+    
+    if (res?.error?.code === "auth/email-already-in-use") {
+      
+      toast.error("Email is already in use. Please use a different email.");
+    } else {
+      toast.success("User created successfully");
+    router.push("/");
+     
+    }
+    } catch (error) {
+      toast.error("something is wrong, An error occurred. Please try again later.")
+    }
   };
 
   return (
